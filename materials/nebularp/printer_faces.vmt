@@ -1,0 +1,5 @@
+UnlitGeneric{
+    "$basetexture" "nebularp/printer_faces"
+    "$vertexcolor" "1"
+    "$vertexalpha" "1"
+}

@@ -1,0 +1,14 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/ogl/ogl_oneprint_scrolling"
+	"Proxies"
+	{
+		"TextureScroll"
+			{
+			"Texturescrollvar" "$Basetexturetransform"
+			"Texturescrollrate" "1"
+			"texturescrollangle" "0"
+			}
+	}
+
+}

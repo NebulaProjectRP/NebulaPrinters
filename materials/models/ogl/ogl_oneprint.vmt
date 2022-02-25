@@ -1,0 +1,28 @@
+"VertexLitGeneric"
+{
+	"$color"				"[1 1 1]"
+	"$basetexture" "models/ogl/ogl_oneprint"
+
+	"$bumpMap"				"models/ogl/ogl_oneprint_nrm"
+	
+	"$surfaceprop" "metal"
+	"$model" 1
+
+	$phong 1
+	$phongboost 0.2
+
+	$phongfresnelranges "[1 2 3]"
+	$phongexponent 15
+	$phongalbedotint 1	
+	
+	$envmap env_cubemap
+	$envmapsaturation 1
+	$envmapcontrast 1
+	$envmapfresnel 1
+	$envmapFresnelMinMaxExp "[1 2 3]"
+	$envmaptint "[0.025 0.025 0.025]"
+	
+	$rimlight               1
+	$rimlightexponent      1
+	$rimlightboost         0.1		
+}
