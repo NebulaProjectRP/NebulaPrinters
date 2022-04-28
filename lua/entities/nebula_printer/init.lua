@@ -127,7 +127,6 @@ function ENT:UpdateState(b, triggered)
     end
     self:SetIsOn(b)
     local animName = b and (self:GetFansOn() and "printer on" or "moneyfall") or "idle"
-    MsgN(animName)
     self:SetSequence(animName)
     self:ResetSequence(animName)
     self:EmitSound(b and "buttons/button1.wav" or "buttons/button16.wav")
