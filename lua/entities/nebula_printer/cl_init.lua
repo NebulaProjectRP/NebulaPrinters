@@ -11,17 +11,21 @@ local mouse = Material("oneprint/wb_cursor.png")
 ENT.Noise = 0
 ENT.Mx, ENT.My = 0, 0
 ENT.ScreenName = "Screensaver"
-
+ENT.MaxDist = 64 ^ 2
 function ENT:ProcessInput(pos, ang)
     local ply = LocalPlayer()
-    if (LocalPlayer():GetEyeTrace().Entity != self) then return end
+    if (LocalPlayer():GetEyeTrace().Entity != self) then
+//        self.Mx, self.My = self.Side / 2, self.Side / 2
+        return
+    end
 
     local ray = util.IntersectRayWithPlane(ply:EyePos(), ply:GetAimVector(), pos, ang:Up())
     if (ray) then
         local posLocal = self:WorldToLocal(ray)
         posLocal.z = posLocal.z * -1 + 62
         posLocal.y = posLocal.y + 11
-        self.Mx, self.My = posLocal.y / scale, posLocal.z / scale
+        self.Mx = posLocal.y / scale
+        self.My = posLocal.z / scale
     end
 end
 
@@ -56,13 +60,28 @@ function ENT:Hurt()
     self.HurtAmount = 3
 end
 
+local colors = {
+    [1] = Color(255, 255, 255, 20),
+    [2] = Color(255, 255, 255, 0),
+    [3] = Color(92, 36, 84, 150),
+    [4] = Color(92, 36, 84, 75),
+}
+local gradient = Material("vgui/gradient-d")
+local brightPurple = Color(174, 0, 209)
 local wasPressed = false
 function ENT:AddButton(x, y, w, h, text, icon, func)
     local isHover = self.Mx >= x and self.Mx <= x + w and self.My >= y and self.My <= y + h
-    draw.RoundedBox(4, x, y, w, h, Color(255, 255, 255, isHover and 50 or 10))
-    draw.RoundedBox(4, x + 1, y + 1, w - 2, h - 2, Color(92, 36, 84, isHover and 200 or 150))
+    draw.RoundedBox(4, x, y, w, h, colors[isHover and 1 or 2])
+    draw.RoundedBox(4, x + 1, y + 1, w - 2, h - 2, colors[isHover and 3 or 4])
     local fontSize = h <= 48 and 24 or 32
     local tx, _ = 0, 0
+    
+    if (isHover) then
+        surface.SetMaterial(gradient)
+        surface.SetDrawColor(brightPurple)
+        surface.DrawTexturedRect(x, y, w, h)
+    end
+    
     if (h <= 48) then
         tx, _ = draw.SimpleText(text, NebulaUI:Font(fontSize), x + w / 2 + 16, y + h / 2, Color(255, 255, 255, isHover and 200 or 150), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     else
@@ -76,7 +95,13 @@ function ENT:AddButton(x, y, w, h, text, icon, func)
     else
         surface.DrawTexturedRect(x + w / 2 - tx / 2 - 30, y + h / 2 - 24, 48, 48)
     end
-    
+
+    local ply = LocalPlayer()
+    if (EyePos():DistToSqr(ply:GetEyeTrace().HitPos) > self.MaxDist) then
+        wasPressed = false
+        return false
+    end
+
     if (not wasPressed and isHover and input.IsKeyDown(KEY_E)) then
         wasPressed = true
         func()
@@ -89,13 +114,18 @@ end
 
 function ENT:AddIconButton(x, y, w, h, icon, func)
     local isHover = self.Mx >= x and self.Mx <= x + w and self.My >= y and self.My <= y + h
-    draw.RoundedBox(4, x, y, w, h, Color(255, 255, 255, isHover and 50 or 10))
-    draw.RoundedBox(4, x + 1, y + 1, w - 2, h - 2, Color(92, 36, 84, isHover and 200 or 150))
+    draw.RoundedBox(4, x, y, w, h, colors[isHover and 1 or 2])
+    draw.RoundedBox(4, x + 1, y + 1, w - 2, h - 2, colors[isHover and 3 or 4])
 
     surface.SetMaterial(icon)
     surface.SetDrawColor(255, 255, 255, isHover and 200 or 150)
     surface.DrawTexturedRectRotated(x + w / 2, y + h / 2, h * .8, h * .8, 0)
     
+    local ply = LocalPlayer()
+    if (EyePos():DistToSqr(ply:GetEyeTrace().HitPos) > self.MaxDist) then
+        wasPressed = false
+        return false
+    end
     if (not wasPressed and isHover and input.IsKeyDown(KEY_E)) then
         wasPressed = true
         func()
@@ -116,7 +146,7 @@ function ENT:DrawOptions()
         self.ScreenName = "Upgrades"
     end)
 
-    self:AddButton(self.Side / 2 + 8, 370, wi, 72, self:GetIsOn() and "Turn Off" or "Turn On", self:GetIsOn() and pause or start, function()
+    self:AddButton(self.Side / 2 + 8, 370, wi + 8, 72, self:GetIsOn() and "Turn Off" or "Turn On", self:GetIsOn() and pause or start, function()
         net.Start("Nebula.Printers:UpdateState")
         net.WriteEntity(self)
         net.SendToServer()
@@ -221,29 +251,27 @@ function ENT:DrawUpgrades()
     end)
 end
 
+local backdrop = Material("vgui/scope_shadowmask")
 function ENT:Draw()
     local pain = self:Health() / NebulaPrinters.Config.Health
     render.SetColorModulation(1, pain, pain)
     self:DrawModel()
     self:SetCycle(RealTime() % 1)
     render.SetColorModulation(1, 1, 1)
+    if LocalPlayer():GetPos():DistToSqr(self:GetPos()) > self.MaxDist * 10 then return end
     if (halo.RenderedEntity() == self) then return end
     local angles = self:GetAngles()
     local pos = self:GetPos() + self:GetUp() * 62 + self:GetRight() * 11.1 + self:GetForward() * 22
-    local trace = LocalPlayer():GetEyeTrace().HitPos
-    local mousePos = self:WorldToLocal(trace)
-    local plyMoney = string.Comma(LocalPlayer():getDarkRPVar("money") or 0)
-    local w, h = 460, 460
     angles:RotateAroundAxis(angles:Up(), 90)
     angles:RotateAroundAxis(angles:Forward(), 75)
-    if LocalPlayer():GetPos():Distance(self:GetPos()) > 500 then return end
 
     self:ProcessInput(pos, angles)
-
-    cam.IgnoreZ(true)
     cam.Start3D2D(pos, angles, scale)
-    surface.SetDrawColor(35, 30, 44)
+    surface.SetDrawColor(31, 16, 59)
     surface.DrawRect(0, 0, self.Side, self.Side)
+    surface.SetDrawColor(255, 255, 255, 200)
+    surface.SetMaterial(backdrop)
+    surface.DrawTexturedRect(0, 0, self.Side, self.Side)
 
     if (self.ScreenName == "Screensaver") then
         self:FaceController()
@@ -251,12 +279,11 @@ function ENT:Draw()
     elseif (self.ScreenName == "Upgrades") then
         self:DrawUpgrades()
     end
-    
+
     surface.SetMaterial(mouse)
     surface.SetDrawColor(color_white)
-    surface.DrawTexturedRect(self.Mx, self.My, 48, 48)
+    surface.DrawTexturedRect(math.Clamp(self.Mx, 0, self.Side - 32), math.Clamp(self.My, 0, self.Side - 32), 32, 32)
     cam.End3D2D()
-    cam.IgnoreZ(false)
 end
 
 local from = Color(225, 145, 225)
