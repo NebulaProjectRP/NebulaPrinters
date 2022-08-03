@@ -15,7 +15,7 @@ ENT.MaxDist = 64 ^ 2
 function ENT:ProcessInput(pos, ang)
     local ply = LocalPlayer()
     if (LocalPlayer():GetEyeTrace().Entity != self) then
-//        self.Mx, self.My = self.Side / 2, self.Side / 2
+        self.Mx, self.My = self.Side / 2, self.Side / 2
         return
     end
 
@@ -52,7 +52,7 @@ function ENT:FaceController()
     end
     
     surface.SetTexture(faces)
-    surface.SetDrawColor(255, 255, 255, self.Noise)
+    surface.SetDrawColor(255, 174, 251, self.Noise)
     surface.DrawTexturedRectUV(x, y, w, h, id * .25, 0, (id * .25) + .25, 1)
 end
 
