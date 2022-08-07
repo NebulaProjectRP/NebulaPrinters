@@ -37,6 +37,7 @@ function ENT:Initialize()
         self:SetBodygroup(k + 7 + 12, 1)
     end
     self:GetPhysicsObject():Wake()
+    self:AddPrinter()
 end
 
 function ENT:AddPrinter()
