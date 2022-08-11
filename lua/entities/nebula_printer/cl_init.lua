@@ -246,9 +246,9 @@ function ENT:DrawUpgrades()
             draw.SimpleText(v.Maxed, NebulaUI:Font(48), 32, offset, Color(134, 218, 78), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         end
 
-        local segment = (self.Side - 64) / (v.Upgrades + v.VIP) - 8
+        local segment = (self.Side - 64) / (v.Max) - 8
 
-        for k = 1, v.Upgrades + v.VIP do
+        for k = 1, v.Max do
             draw.RoundedBox(4, 32 + (k - 1) * (segment + 8), offset + 56, segment, 24, self[v.Get](self) >= k and Color(235, 235, 235) or Color(75, 75, 75, 255))
         end
 
