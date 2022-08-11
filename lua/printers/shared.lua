@@ -9,7 +9,7 @@ NebulaPrinters.Config = {
 
 NebulaPrinters.VIPConfig = {
     ["cosmo"] = {
-        extraPrinters: 1 -- Amount of extra printers this rank can have.
+        extraPrinters = 1 -- Amount of extra printers this rank can have.
     }
 }
 
