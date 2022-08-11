@@ -57,7 +57,7 @@ function ENT:ToggleFans()
     if (self.LoopingMachine) then
         self:StopLoopingSound(self.LoopingMachine)
     end
-    if (self:GetFansOn()) then
+    if (self:GetFansOn() and self:GetIsOn()) then
         self.LoopingMachine = self:StartLoopingSound("ambient/machines/lab_loop1.wav")
     end
 end
