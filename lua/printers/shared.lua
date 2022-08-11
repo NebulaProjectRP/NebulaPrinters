@@ -21,7 +21,7 @@ NebulaPrinters.Upgrades = {
         Icon = Material("oneprint/upgrades/server.png"),
         Upgrades = 3, -- The amount of upgrades the default player can have.
         Max = 6,
-        Price = 10000,
+        Price = 3500,
         func = function(ent)
             ent:AddPrinter()
         end
@@ -33,7 +33,7 @@ NebulaPrinters.Upgrades = {
         Icon = Material("oneprint/upgrades/overclocking.png"),
         Upgrades = 5, -- The amount of upgrades the default player can have.
         Max = 5, -- The max amount of upgrades anyone can have.
-        Price = 50000,
+        Price = 3000,
         func = function(ent)
             ent:SetSpeedUpgrade(ent:GetSpeedUpgrade() + 1)
         end
@@ -45,7 +45,7 @@ NebulaPrinters.Upgrades = {
         Icon = Material("oneprint/shop.png"),
         Upgrades = 5, -- The amount of upgrades the default player can have.
         Max = 5, -- The max amount of upgrades anyone can have.
-        Price = 75000,
+        Price = 1500,
         func = function(ent)
             ent:SetCapacity(ent:GetCapacity() + 1)
         end
@@ -57,7 +57,7 @@ NebulaPrinters.Upgrades = {
         Icon = Material("oneprint/upgrades/defense.png"),
         Upgrades = 5, -- The amount of upgrades the default player can have.
         Max = 5, -- The max amount of upgrades anyone can have.
-        Price = 75000,
+        Price = 1500,
         func = function(ent)
             ent:SetRaidUpgrade(ent:GetRaidUpgrade() + 1)
         end
