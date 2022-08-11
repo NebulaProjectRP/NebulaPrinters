@@ -65,5 +65,5 @@ NebulaPrinters.Upgrades = {
 }
 
 function NebulaPrinters:GetMaxUpgrade(ply, id)
-    return (NebulaPrinters.VIPConfig(ply:getTitle()).extraPrinters or 0) + self.Upgrades[id].Upgrades
+    return (NebulaPrinters.VIPConfig[ply:getTitle()].extraPrinters or 0) + self.Upgrades[id].Upgrades
 end
