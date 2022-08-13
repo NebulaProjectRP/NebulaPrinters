@@ -1,0 +1,12 @@
+"UnlitGeneric" {
+    "$basetexture" "nebularp/particles/money_anim"
+    "$vertexalpha" "1"
+    "$vertexcolor" "1"
+    "Proxies" {
+        "AnimatedTexture" {
+            "animatedtexturevar" "$basetexture"
+            "animatedtextureframenumvar" "$frame"
+            "animatedtextureframerate" "30"
+        }
+    }
+}

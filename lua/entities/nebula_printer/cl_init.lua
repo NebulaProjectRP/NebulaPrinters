@@ -316,7 +316,45 @@ function ENT:GetTintColor()
     end
 end
 
+local moneyFlying = Material("nebularp/particles/money_anim")
+ENT.NextBit = 0
+ENT.FlyingBits = {}
+ENT.MaxBits = 8
+local maxDist = 8 ^ 2
+local index = 0
 function ENT:DrawTranslucent()
+    local syphon = self:GetSyphon()
+    if not IsValid(syphon) then return end
+
+    if (self.NextBit < RealTime()) then
+        self.NextBit = RealTime() + .5
+        index = index + 1
+        table.insert(self.FlyingBits, {
+            Pos = self:GetPos() + self:GetUp() * 62 + self:GetRight() * 11.1 + self:GetForward() * 22,
+            Vel = 32,
+            Index = index,
+            Scale = math.Rand(.25, .4)
+        })
+    end
+
+    render.SetMaterial(moneyFlying)
+    local count = #self.FlyingBits
+    local fordeletion
+    for k, v in pairs(self.FlyingBits) do
+        local diff = (syphon:GetPos() + syphon:OBBCenter() - v.Pos):GetNormalized()
+        v.Pos = v.Pos + diff * v.Vel * FrameTime()
+        v.Vel = v.Vel + FrameTime() * 8
+        if (v.Pos:DistToSqr(syphon:GetPos() + syphon:OBBCenter()) < maxDist) then
+            fordeletion = k
+        end
+
+        local power = 1 - math.abs(k / (count / 2) - 1)
+        render.DrawSprite(v.Pos + Vector(0, 0, power * 8 * math.cos(RealTime() * 4 + (k / v.Index) * math.pi * 2)), 32 * v.Scale, 32 * v.Scale, Color(255, 255, 255, power * 255))
+    end
+
+    if fordeletion then
+        table.remove(self.FlyingBits, fordeletion)
+    end
 end
 
 matproxy.Add({

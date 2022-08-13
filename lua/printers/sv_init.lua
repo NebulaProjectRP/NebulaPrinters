@@ -13,10 +13,10 @@ net.Receive("Nebula.Printers:UpdateState", function(l, ply)
         return
     end
 
-    local owner = ent:Getowning_ent():getGang()
+    local owner = ent:Getowning_ent()
 
-    if ent:Getowning_ent() ~= ply then
-        if owner:getGang() and owner:getGang() ~= ply:getGang() then return end
+    if ent:Getowning_ent() ~= ply and  owner:getGang() and owner:getGang() ~= ply:getGang() then
+        return
     end
 
     ent:UpdateState(not ent:GetIsOn(), ply)
@@ -83,7 +83,7 @@ net.Receive("Nebula.Printers:RequestMoney", function(l, ply)
         return
     end
 
-    local owner = ent:Getowning_ent():getGang()
+    local owner = ent:Getowning_ent()
 
     if ent:Getowning_ent() ~= ply and owner:getGang() and owner:getGang() ~= ply:getGang() then
         ent:StartSyphoning(ply)
