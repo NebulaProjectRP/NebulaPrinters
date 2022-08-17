@@ -57,7 +57,7 @@ net.Receive("Nebula.Printers:ToggleFans", function(l, ply)
         return
     end
 
-    local owner = ent:Getowning_ent():getGang()
+    local owner = ent:Getowning_ent()
 
     if ent:Getowning_ent() ~= ply and owner:getGang() and owner:getGang() ~= ply:getGang() then
         DarkRP.notify(ply, 1, 4, "You can't toggle fans on a printer that isn't yours.")
