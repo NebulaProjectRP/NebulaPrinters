@@ -7,7 +7,7 @@ function ENT:SpawnFunction(ply, tr, cs)
     ent:SetPos(tr.HitPos+tr.HitNormal*16)
     ent:Spawn()
     ent:Activate()
-    ent:Setowning_ent(ply)
+    //ent:Setowning_ent(ply)
     return ent
 end
 
@@ -64,6 +64,12 @@ end
 
 ENT.HealingIn = 0
 function ENT:Think()
+
+    if not IsValid(self:Getowning_ent()) then
+        self:TakeDamage(5, self, self)
+        return
+    end
+
     if IsValid(self:GetSyphon()) then
         local dist = self:GetPos():Distance(self:GetSyphon():GetPos())
         if (!self:GetSyphon():Alive() or dist > 512) then
@@ -146,12 +152,14 @@ function ENT:OnTakeDamage(dmg)
     self.HealingIn = CurTime() + 5
     self:SetSkin(3)
     if (self:Health() <= 0) then
-        local explode = ents.Create( "env_explosion" ) -- creates the explosion
-        explode:SetPos( self:GetPos() )
-        explode:SetOwner( dmg:GetAttacker() )
-        explode:Spawn()
-        explode:SetKeyValue( "iMagnitude", "220" )
-        explode:Fire( "Explode", 0, 0 )
+        if (IsValid(self:Getowning_ent())) then
+            local explode = ents.Create( "env_explosion" ) -- creates the explosion
+            explode:SetPos( self:GetPos() )
+            explode:SetOwner( dmg:GetAttacker() )
+            explode:Spawn()
+            explode:SetKeyValue( "iMagnitude", "220" )
+            explode:Fire( "Explode", 0, 0 )
+        end
         self:Remove()
     else
         self:callOnClient(RPC_PVS, "Hurt")
