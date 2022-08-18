@@ -148,6 +148,7 @@ end
 local upgrade = Material("oneprint/light.png")
 local start = Material("oneprint/start.png")
 local pause = Material("oneprint/stop.png")
+local netWait = 0
 
 function ENT:DrawOptions()
     local wi = self.Side / 2 - 32
@@ -157,6 +158,10 @@ function ENT:DrawOptions()
     end)
 
     self:AddButton(self.Side / 2 + 8, 370, wi + 8, 72, self:GetIsOn() and "Turn Off" or "Turn On", self:GetIsOn() and pause or start, function()
+        if (netWait > CurTime()) then
+            return
+        end
+        netWait = CurTime() + .5
         net.Start("Nebula.Printers:UpdateState")
         net.WriteEntity(self)
         net.SendToServer()
@@ -194,6 +199,10 @@ function ENT:ScreenSaver()
 
     if self.My > 270 and self.My < 270 + 84 then
         self:AddButton(16, 270, self.Side - 32, 84, "Extract", extractIcon, function()
+            if (netWait > CurTime()) then
+                return
+            end
+            netWait = CurTime() + .5
             net.Start("Nebula.Printers:RequestMoney")
             net.WriteEntity(self)
             net.SendToServer()
@@ -235,6 +244,10 @@ function ENT:DrawUpgrades()
 
         if NebulaPrinters:GetMaxUpgrade(LocalPlayer(), k) > value then
             local isHover = self:AddIconButton(self.Side - 32 - 64 - 8, offset + 4, 64, 40, v.Icon, function()
+                if (netWait > CurTime()) then
+                    return
+                end
+                netWait = CurTime() + .5
                 net.Start("Nebula.Printers:DoUpgrade")
                 net.WriteEntity(self)
                 net.WriteUInt(k, 3)
@@ -262,6 +275,10 @@ function ENT:DrawUpgrades()
     end)
 
     self:AddButton(self.Side / 2 + 8, 370, wi, 72, self:GetFansOn() and "Silent" or "Turbo", self:GetFansOn() and silence or turbo, function()
+        if (netWait > CurTime()) then
+            return
+        end
+        netWait = CurTime() + .5
         net.Start("Nebula.Printers:ToggleFans")
         net.WriteEntity(self)
         net.SendToServer()
