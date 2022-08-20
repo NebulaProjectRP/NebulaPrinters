@@ -1,8 +1,8 @@
 NebulaPrinters.Config = {
-    Health = 200,
-    MinimumRequired = .75,
-    MoneyPerPrinter = 7000,
-    MoneyPerTick = 13,
+    Health = 350,
+    MinimumRequired = .5,
+    MoneyPerPrinter = 8000,
+    MoneyPerTick = 15,
     TickDelay = 1,
     VIPPrinters = 2,
 }
@@ -19,7 +19,7 @@ NebulaPrinters.Upgrades = {
         Maxed = "Printers Maxed",
         Get = "GetPrinters",
         Icon = Material("oneprint/upgrades/server.png"),
-        Upgrades = 3, -- The amount of upgrades the default player can have.
+        Upgrades = 4, -- The amount of upgrades the default player can have.
         Max = 6,
         Price = 3500,
         func = function(ent)
