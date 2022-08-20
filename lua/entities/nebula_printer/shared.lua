@@ -28,7 +28,7 @@ function ENT:GetMoneyPerSecond()
     if (self:GetFansOn()) then
         multiplier = multiplier * 1.25
     end
-    
+
     return math.Round(base * multiplier)
 end
 

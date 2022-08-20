@@ -51,6 +51,7 @@ end
 
 function ENT:AddPrinter()
     if self:GetPrinters() > 5 then return end
+
     self:SetPrinters(self:GetPrinters() + 1)
     local offset = (self:GetPrinters() - 1) * 6
 

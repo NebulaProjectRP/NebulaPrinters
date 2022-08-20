@@ -26,7 +26,7 @@ net.Receive("Nebula.Printers:DoUpgrade", function(l, ply)
     local ent = net.ReadEntity()
     local upgrade = net.ReadUInt(3)
     if not IsValid(ent) then return end
-    if (ent:Getowning_ent() != ply) then return end
+    if ent:Getowning_ent() ~= ply then return end
     local data = NebulaPrinters.Upgrades[upgrade]
 
     if data then
