@@ -1,6 +1,6 @@
 NebulaPrinters.Config = {
     Health = 400,
-    MinimumRequired = .5,
+    MinimumRequired = 30000,
     MoneyPerPrinter = 12500,
     MoneyPerTick = 12,
     TickDelay = 1,

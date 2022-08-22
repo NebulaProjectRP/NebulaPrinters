@@ -37,10 +37,6 @@ function ENT:FaceController()
     local w, h = self.Side * .5, self.Side * .5 + self.Noise / 30 - 8
     local id = 0
 
-    if self:GetMoney() >= self:GetMaxMoney() then
-        id = 3
-    end
-
     if self.HurtAmount > 0 then
         self.HurtAmount = self.HurtAmount - FrameTime()
         id = 1
@@ -208,14 +204,8 @@ function ENT:ScreenSaver()
             net.SendToServer()
         end)
     else
-        local max = money / self:GetMaxMoney()
-        surface.SetDrawColor(max < NebulaPrinters.Config.MinimumRequired and orange or green)
-        surface.DrawRect(16, 270 + 84 - 8, (self.Side - 32) * max, 8)
-
-        if max < .95 then
-            surface.SetMaterial(gright)
-            surface.DrawTexturedRect(16 + math.floor((self.Side - 32) * max), 270 + 84 - 8, 16, 8)
-        end
+        surface.SetDrawColor(money < NebulaPrinters.Config.MinimumRequired and orange or green)
+        surface.DrawRect(16, 270 + 84 - 8, self.Side - 32, 8)
 
         local size = 0
         surface.SetFont("Printer.MonoSpace")
@@ -325,12 +315,6 @@ local to = Color(147, 180, 209)
 
 function ENT:GetTintColor()
     if not self:GetIsOn() then return Color(25, 25, 25) end
-
-    if self:GetMoney() < self:GetMaxMoney() then
-        local frame = math.cos(RealTime() * 4) / 2 + .5
-
-        return Color(Lerp(frame, from.r, to.r), Lerp(frame, from.g, to.g), Lerp(frame, from.b, to.b))
-    end
 end
 
 local moneyFlying = Material("nebularp/particles/money_anim")

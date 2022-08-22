@@ -78,7 +78,7 @@ net.Receive("Nebula.Printers:RequestMoney", function(l, ply)
         return
     end
 
-    if ent:GetMoney() / ent:GetMaxMoney() < NebulaPrinters.Config.MinimumRequired then
+    if ent:GetMoney() < NebulaPrinters.Config.MinimumRequired then
         DarkRP.notify(ply, 1, 4, "This printer doesn't have enough money to withdraw.")
 
         return

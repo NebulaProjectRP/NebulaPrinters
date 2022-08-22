@@ -31,7 +31,3 @@ function ENT:GetMoneyPerSecond()
 
     return math.Round(base * multiplier)
 end
-
-function ENT:GetMaxMoney()
-    return math.max(NebulaPrinters.Config.MoneyPerPrinter * self:GetPrinters() + (NebulaPrinters.Config.MoneyPerPrinter * (self:GetCapacity() / 5)), 1)
-end
