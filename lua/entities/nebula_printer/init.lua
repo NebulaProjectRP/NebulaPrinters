@@ -189,7 +189,7 @@ function ENT:OnTakeDamage(dmg)
             explode:SetPos(self:GetPos())
             explode:SetOwner(dmg:GetAttacker())
             explode:Spawn()
-            explode:SetKeyValue("iMagnitude", "220")
+            explode:SetKeyValue("iMagnitude", "90")
             explode:Fire("Explode", 0, 0)
         end
 
