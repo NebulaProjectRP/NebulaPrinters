@@ -103,8 +103,8 @@ function ENT:Think()
         eff:SetRadius(16)
         eff:SetNormal(self:GetForward())
         util.Effect("Sparks", eff, true, true)
-        local ten = self:GetRaidUpgrade() / 10
-        local percent = ten * self:GetMoney() * .025
+        local ten = self:GetRaidUpgrade() / 15
+        local percent = self:GetMaxMoney() * .075 - ten * self:GetMaxMoney() * .025
         self:GetSyphon():addMoney(percent)
         self:SetMoney(self:GetMoney() - percent)
 
