@@ -30,7 +30,7 @@ function ENT:GetMoneyPerSecond()
     local multiplier = hook.Run("GetPrinterMoneyMultiplier", self, self:Getowning_ent()) or 1
 
     if (self:GetFansOn()) then
-        multiplier = multiplier * 1.25
+        multiplier = multiplier * 1.5
     end
 
     return math.Round(base * multiplier)

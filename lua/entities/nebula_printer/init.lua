@@ -67,11 +67,18 @@ function ENT:ToggleFans()
     self:SetFansOn(not self:GetFansOn())
 
     if self.LoopingMachine then
-        self:StopLoopingSound(self.LoopingMachine)
+        self.LoopingMachine:Stop()
     end
 
     if self:GetFansOn() and self:GetIsOn() then
-        self.LoopingMachine = self:StartLoopingSound("ambient/machines/lab_loop1.wav")
+        self.LoopingMachine = CreateSound(self, "ambient/machines/lab_loop1.wav")
+        self.LoopingMachine:SetSoundLevel(60)
+        self.LoopingMachine:Play()
+        timer.Create(self:EntIndex() .. "_sound", SoundDuration( "ambient/machines/lab_loop1.wav" ), 0, function()
+            if (IsValid(self) and self.LoopingMachine) then
+                self.LoopingMachine:Play()
+            end
+        end)
     end
 end
 
@@ -167,14 +174,27 @@ function ENT:UpdateState(b, triggered)
     self:EmitSound(b and "buttons/button1.wav" or "buttons/button16.wav")
 
     if self.LoopingMachine then
-        self:StopLoopingSound(self.LoopingMachine)
+        self.LoopingMachine:Stop()
     end
 
     if self:GetFansOn() and b then
-        self.LoopingMachine = self:StartLoopingSound("ambient/machines/lab_loop1.wav")
+        self.LoopingMachine = CreateSound(self, "ambient/machines/lab_loop1.wav")
+        self.LoopingMachine:SetSoundLevel(60)
+        self.LoopingMachine:Play()
+        timer.Create(self:EntIndex() .. "_sound", SoundDuration( "ambient/machines/lab_loop1.wav" ), 0, function()
+            if (IsValid(self) and self.LoopingMachine) then
+                self.LoopingMachine:Play()
+            end
+        end)
     end
 
     self:NextThink(CurTime())
+end
+
+function ENT:OnRemove()
+    if self.LoopingMachine then
+        self.LoopingMachine:Stop()
+    end
 end
 
 function ENT:OnTakeDamage(dmg)
