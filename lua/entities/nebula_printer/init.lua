@@ -200,6 +200,9 @@ end
 
 function ENT:OnTakeDamage(dmg)
     if self:Health() <= 0 then return end
+    if (self:GetFansOn()) then
+        dmg:SetDamage(dmg:GetDamage() * 1.5)
+    end
     self:SetHealth(self:Health() - dmg:GetDamage())
     self.HealingIn = CurTime() + 5
     self:SetSkin(3)

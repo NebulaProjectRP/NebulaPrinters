@@ -25,12 +25,12 @@ end
 
 function ENT:GetMoneyPerSecond()
     local base = self:GetPrinters() * (NebulaPrinters.Config.MoneyPerTick / NebulaPrinters.Config.TickDelay)
-    base = base + (base * (self:GetSpeedUpgrade() / 10))
+    base = base + (base * (self:GetSpeedUpgrade() / 7.5))
 
     local multiplier = hook.Run("GetPrinterMoneyMultiplier", self, self:Getowning_ent()) or 1
 
     if (self:GetFansOn()) then
-        multiplier = multiplier * 1.5
+        multiplier = multiplier * 2
     end
 
     return math.Round(base * multiplier)
