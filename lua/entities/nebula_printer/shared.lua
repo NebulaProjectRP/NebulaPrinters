@@ -19,6 +19,10 @@ function ENT:SetupDataTables()
     self:SetFansOn(true)
 end
 
+function ENT:GetMaxMoney()
+    return math.max(NebulaPrinters.Config.MoneyPerPrinter * self:GetPrinters() + (NebulaPrinters.Config.MoneyPerPrinter * (self:GetCapacity() / 5)), 1)
+end
+
 function ENT:GetMoneyPerSecond()
     local base = self:GetPrinters() * (NebulaPrinters.Config.MoneyPerTick / NebulaPrinters.Config.TickDelay)
     base = base + (base * (self:GetSpeedUpgrade() / 10))

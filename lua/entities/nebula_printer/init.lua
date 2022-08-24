@@ -103,8 +103,8 @@ function ENT:Think()
         eff:SetRadius(16)
         eff:SetNormal(self:GetForward())
         util.Effect("Sparks", eff, true, true)
-        local ten = self:GetRaidUpgrade() / 15
-        local percent = self:GetMaxMoney() * .075 - ten * self:GetMaxMoney() * .025
+        local ten = self:GetRaidUpgrade() / 10
+        local percent = self:GetMaxMoney() * .05 - ten * self:GetMaxMoney() * .025
         self:GetSyphon():addMoney(percent)
         self:SetMoney(self:GetMoney() - percent)
 
@@ -124,6 +124,12 @@ function ENT:Think()
 
     if self:GetIsOn() then
         self:SetMoney(self:GetMoney() + self:GetMoneyPerSecond())
+
+        if self:GetMoney() > self:GetMaxMoney() then
+            self:SetSkin(1)
+            self:SetMoney(math.Round(self:GetMaxMoney()))
+            self:SetIsOn(false)
+        end
     end
 
     if self:Health() ~= NebulaPrinters.Config.Health and self.HealingIn < CurTime() then
