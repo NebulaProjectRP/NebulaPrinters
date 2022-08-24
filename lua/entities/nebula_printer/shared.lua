@@ -20,7 +20,7 @@ function ENT:SetupDataTables()
 end
 
 function ENT:GetMaxMoney()
-    return math.max(NebulaPrinters.Config.MoneyPerPrinter * self:GetPrinters() + (NebulaPrinters.Config.MoneyPerPrinter * (self:GetCapacity() / 5)), 1)
+    return 100000
 end
 
 function ENT:GetMoneyPerSecond()
