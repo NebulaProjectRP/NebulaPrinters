@@ -13,7 +13,7 @@ function ENT:SpawnFunction(ply, tr, cs)
 end
 
 function ENT:OnRemove()
-    if self.LoopingMachine then
+    if self.LoopingMachine and self.LoopingMachine.Stop then
         self:StopLoopingSound(self.LoopingMachine)
     end
 end
@@ -66,7 +66,7 @@ end
 function ENT:ToggleFans()
     self:SetFansOn(not self:GetFansOn())
 
-    if self.LoopingMachine then
+    if self.LoopingMachine and self.LoopingMachine.Stop then
         self.LoopingMachine:Stop()
     end
 
@@ -131,12 +131,13 @@ function ENT:Think()
 
     if self:GetIsOn() then
         self:SetMoney(self:GetMoney() + self:GetMoneyPerSecond())
-
+        /*
         if self:GetMoney() > self:GetMaxMoney() then
             self:SetSkin(1)
             self:SetMoney(math.Round(self:GetMaxMoney()))
             self:SetIsOn(false)
         end
+        */
     end
 
     if self:Health() ~= NebulaPrinters.Config.Health and self.HealingIn < CurTime() then
