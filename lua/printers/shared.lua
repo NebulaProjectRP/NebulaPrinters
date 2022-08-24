@@ -32,7 +32,7 @@ NebulaPrinters.Upgrades = {
         Icon = Material("oneprint/upgrades/overclocking.png"),
         Upgrades = 5, -- The amount of upgrades the default player can have.
         Max = 5, -- The max amount of upgrades anyone can have.
-        Price = 3000,
+        Price = 7500,
         func = function(ent)
             ent:SetSpeedUpgrade(ent:GetSpeedUpgrade() + 1)
         end
