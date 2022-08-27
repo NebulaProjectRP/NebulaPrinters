@@ -93,6 +93,7 @@ net.Receive("Nebula.Printers:RequestMoney", function(l, ply)
     end
 
     ply:addMoney(ent:GetMoney())
+    hook.Run("ASAPPrinters.WithdrawMoney", ply, ent, ent:GetMoney(), 10)
     DarkRP.notify(ply, 2, 5, "You have taken " .. DarkRP.formatMoney(ent:GetMoney()) .. " from the printer.")
     ent:SetMoney(0)
     ent:EmitSound("buttons/bell1.wav")

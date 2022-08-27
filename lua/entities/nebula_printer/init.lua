@@ -115,6 +115,8 @@ function ENT:Think()
         self:GetSyphon():addMoney(percent)
         self:SetMoney(self:GetMoney() - percent)
 
+        hook.Run("ASAPPrinters.WithdrawMoney", self:GetSyphon(), self, percent, 10)
+
         if self:GetMoney() <= 0 then
             self:UpdateState(false, self:GetSyphon())
             self:SetMoney(0)
