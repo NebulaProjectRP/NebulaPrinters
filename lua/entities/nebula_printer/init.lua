@@ -13,7 +13,7 @@ function ENT:SpawnFunction(ply, tr, cs)
 end
 
 function ENT:OnRemove()
-    if self.LoopingMachine then
+    if self.LoopingMachine and self.LoopingMachine.Stop then
         self:StopLoopingSound(self.LoopingMachine)
     end
 end
@@ -66,12 +66,19 @@ end
 function ENT:ToggleFans()
     self:SetFansOn(not self:GetFansOn())
 
-    if self.LoopingMachine then
-        self:StopLoopingSound(self.LoopingMachine)
+    if self.LoopingMachine and self.LoopingMachine.Stop then
+        self.LoopingMachine:Stop()
     end
 
     if self:GetFansOn() and self:GetIsOn() then
-        self.LoopingMachine = self:StartLoopingSound("ambient/machines/lab_loop1.wav")
+        self.LoopingMachine = CreateSound(self, "ambient/machines/lab_loop1.wav")
+        self.LoopingMachine:SetSoundLevel(60)
+        self.LoopingMachine:Play()
+        timer.Create(self:EntIndex() .. "_sound", SoundDuration( "ambient/machines/lab_loop1.wav" ), 0, function()
+            if (IsValid(self) and self.LoopingMachine) then
+                self.LoopingMachine:Play()
+            end
+        end)
     end
 end
 
@@ -104,9 +111,11 @@ function ENT:Think()
         eff:SetNormal(self:GetForward())
         util.Effect("Sparks", eff, true, true)
         local ten = self:GetRaidUpgrade() / 10
-        local percent = ten * self:GetMoney() * .025
+        local percent = self:GetMaxMoney() * .05 - ten * self:GetMaxMoney() * .025
         self:GetSyphon():addMoney(percent)
         self:SetMoney(self:GetMoney() - percent)
+
+        hook.Run("ASAPPrinters.WithdrawMoney", self:GetSyphon(), self, percent, 10)
 
         if self:GetMoney() <= 0 then
             self:UpdateState(false, self:GetSyphon())
@@ -124,6 +133,13 @@ function ENT:Think()
 
     if self:GetIsOn() then
         self:SetMoney(self:GetMoney() + self:GetMoneyPerSecond())
+        /*
+        if self:GetMoney() > self:GetMaxMoney() then
+            self:SetSkin(1)
+            self:SetMoney(math.Round(self:GetMaxMoney()))
+            self:SetIsOn(false)
+        end
+        */
     end
 
     if self:Health() ~= NebulaPrinters.Config.Health and self.HealingIn < CurTime() then
@@ -161,18 +177,34 @@ function ENT:UpdateState(b, triggered)
     self:EmitSound(b and "buttons/button1.wav" or "buttons/button16.wav")
 
     if self.LoopingMachine then
-        self:StopLoopingSound(self.LoopingMachine)
+        self.LoopingMachine:Stop()
     end
 
     if self:GetFansOn() and b then
-        self.LoopingMachine = self:StartLoopingSound("ambient/machines/lab_loop1.wav")
+        self.LoopingMachine = CreateSound(self, "ambient/machines/lab_loop1.wav")
+        self.LoopingMachine:SetSoundLevel(60)
+        self.LoopingMachine:Play()
+        timer.Create(self:EntIndex() .. "_sound", SoundDuration( "ambient/machines/lab_loop1.wav" ), 0, function()
+            if (IsValid(self) and self.LoopingMachine) then
+                self.LoopingMachine:Play()
+            end
+        end)
     end
 
     self:NextThink(CurTime())
 end
 
+function ENT:OnRemove()
+    if self.LoopingMachine then
+        self.LoopingMachine:Stop()
+    end
+end
+
 function ENT:OnTakeDamage(dmg)
     if self:Health() <= 0 then return end
+    if (self:GetFansOn()) then
+        dmg:SetDamage(dmg:GetDamage() * 1.5)
+    end
     self:SetHealth(self:Health() - dmg:GetDamage())
     self.HealingIn = CurTime() + 5
     self:SetSkin(3)
