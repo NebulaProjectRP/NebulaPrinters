@@ -71,6 +71,7 @@ end)
 net.Receive("Nebula.Printers:RequestMoney", function(l, ply)
     local ent = net.ReadEntity()
     if not IsValid(ent) then return end
+    if (ply:IsDueling()) then return end
 
     if ply:GetEyeTrace().Entity ~= ent then
         ply:addWarning("Attempting to request money on a printer they are not near.", WARNING_HIGH, debug.traceback())
