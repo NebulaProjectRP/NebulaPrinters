@@ -210,6 +210,8 @@ function ENT:OnTakeDamage(dmg)
     self:SetSkin(3)
 
     if self:Health() <= 0 then
+        hook.Run("ASAPPrinters.DestroyPrinter", self, dmg:GetAttacker())
+
         if IsValid(self:Getowning_ent()) then
             local explode = ents.Create("env_explosion") -- creates the explosion
             explode:SetPos(self:GetPos())
